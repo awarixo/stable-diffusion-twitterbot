@@ -27,21 +27,23 @@ check = False
 
 
 class tweet_listener(tweepy.StreamingClient):
+    #Function to retrieve tweet ID
     def on_tweet(self, tweet):
+        
+        #Check to ignore account retweets
         RT_check = "RT"
         if RT_check in tweet.text:
             time.sleep(1)
         else:
+            # global variable for while loop call in main function
             global check
+            
+            # global variable to store tweet ID
             global id
-            #global handle
             id = tweet.id
             tweet_id = tweet.id
-
-            print(tweet.text)
             print(id)
             check = True
-            print (check)
             return id
     
     def on_error(self, status):
@@ -50,7 +52,7 @@ class tweet_listener(tweepy.StreamingClient):
 
 
 
-
+#Function for tweepy api authentication
 def api_call():
     auth = tweepy.OAuthHandler(API_KEY, API_KEY_SECRET)
     auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
@@ -58,10 +60,10 @@ def api_call():
     return tweepy.API(auth)
 
 
-
+#Function to retrieve tweet text
 def pull(api, tweet_id):
         global text
-        print(f"Pull funct")
+        print(f Pull funct")
         #print(tweet_id)
         tweet = api.get_status(tweet_id, tweet_mode='extended')
         result = tweet.full_text
@@ -72,8 +74,8 @@ def pull(api, tweet_id):
         return text
 
 
-#Stable diffusion image generator
-def img(tweet):
+#Function for Stable diffusion image generator
+def StableDiffusionImg(tweet):
     print("making image")
     try:
         stability_api = client.StabilityInference(
@@ -136,7 +138,7 @@ def main():
                     print("image tweet so no output")
                 else:
                     #Image generation and saving 
-                    img(pulled_tweet)
+                    StableDiffusionImg
                     time.sleep(8)
                     output(api, id_fetch)
                     check = False
